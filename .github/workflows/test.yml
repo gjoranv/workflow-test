@@ -44,8 +44,8 @@ jobs:
         run: |
           set -x
           echo "LIST_GIT: $LIST_GIT"
-          echo "Listing files in the repository:"
-          ls -l "$LIST_GIT" .github
+          echo "Listing files regardless of dry-run:"
+          ls -l ${LIST_GIT:-} .github
 
-          echo "Listing files if not dry-run:"
-          $DRY_RUN ls -l "$LIST_GIT" .github
+          echo "Listing files only if not dry-run:"
+          $DRY_RUN ls -l ${LIST_GIT:-} .github
