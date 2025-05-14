@@ -1,0 +1,44 @@
+name: Test workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Run in dry-run mode'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  actions: read
+  contents: read
+  id-token: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  job-1:
+    name: Promote to public
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: false # Keeps a new job pending until an existing job completes
+
+    env:
+      DRY_RUN: ${{ inputs.dry-run && 'echo' || '' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: List files
+        run: |
+          echo "Listing files in the repository:"
+          pwd
+          ls -la
+          echo "Listing files in the current directory:"
+          pwd
+          ls -la .
