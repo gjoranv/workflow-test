@@ -40,7 +40,7 @@ jobs:
 
       - name: List files
         env:
-          LIST_GIT: ${{ inputs.dry-run == 'true' && '.git' || '' }}
+          LIST_GIT: ${{ inputs.dry-run && '.git' || '' }}
         run: |
           set -x
           echo "LIST_GIT: $LIST_GIT"
