@@ -29,7 +29,6 @@ jobs:
 
     env:
       DRY_RUN: ${{ inputs.dry-run && 'echo' || '' }}
-      IGNORE_ERROR: ${{ inputs.dry-run && '|| true' || '' }}
 
     steps:
       - name: Print inputs
@@ -46,10 +45,11 @@ jobs:
           set -x
           echo "LIST_GIT: $LIST_GIT"
           echo "Listing files regardless of dry-run:"
-          ls -l ${LIST_GIT:-} .github ${IGNORE_ERROR:-}
-
-          if [ -n "$IGNORE_ERROR" ]; then
-            echo "Dry run: Skipping errors from promotion check"
+          ls -l ${LIST_GIT:-} \
+            .github ${{ inputs.dry-run && '|| true' || '' }}
+ 
+           if [ "${{ inputs.dry-run }}" = "true" ]; then
+            echo "Dry run is enabled."
           fi
 
           echo "Listing files only if not dry-run:"
