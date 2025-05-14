@@ -19,8 +19,8 @@ defaults:
     shell: bash
 
 jobs:
-  job-1:
-    name: Promote to public
+  test-job-1:
+    name: Test job 1
     runs-on: ubuntu-latest
 
     concurrency:
@@ -39,6 +39,7 @@ jobs:
           echo "Listing files in the repository:"
           pwd
           ls -la
-          echo "Listing files in the current directory:"
+
+          echo "Listing files if not dry-run:"
           pwd
-          ls -la .
+          $DRY_RUN ls -la
