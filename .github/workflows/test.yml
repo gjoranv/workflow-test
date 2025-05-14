@@ -31,6 +31,10 @@ jobs:
       DRY_RUN: ${{ inputs.dry-run && 'echo' || '' }}
 
     steps:
+      - name: Print inputs
+        run: |
+          echo "Dry run: ${{ inputs.dry-run }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
