@@ -39,11 +39,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: List files
+        env:
+          LIST_GIT: ${{ inputs.dry-run == 'true' && '.git' || '' }}
         run: |
+          set -x
+          echo "LIST_GIT: $LIST_GIT"
           echo "Listing files in the repository:"
-          pwd
-          ls -la
+          ls -l "$LIST_GIT" .github
 
           echo "Listing files if not dry-run:"
-          pwd
-          $DRY_RUN ls -la
+          $DRY_RUN ls -l "$LIST_GIT" .github
