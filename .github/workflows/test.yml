@@ -19,8 +19,8 @@ defaults:
     shell: bash
 
 jobs:
-  job-1:
-    name: Promote to public
+  test-job-1:
+    name: Test job 1
     runs-on: ubuntu-latest
 
     concurrency:
@@ -31,14 +31,21 @@ jobs:
       DRY_RUN: ${{ inputs.dry-run && 'echo' || '' }}
 
     steps:
+      - name: Print inputs
+        run: |
+          echo "Dry run: ${{ inputs.dry-run }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: List files
+        env:
+          LIST_GIT: ${{ inputs.dry-run && '.git' || '' }}
         run: |
-          echo "Listing files in the repository:"
-          pwd
-          ls -la
-          echo "Listing files in the current directory:"
-          pwd
-          ls -la .
+          set -x
+          echo "LIST_GIT: $LIST_GIT"
+          echo "Listing files regardless of dry-run:"
+          ls -l ${LIST_GIT:-} .github
+
+          echo "Listing files only if not dry-run:"
+          $DRY_RUN ls -l ${LIST_GIT:-} .github
