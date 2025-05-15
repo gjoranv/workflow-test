@@ -46,9 +46,9 @@ jobs:
             }
             // Get workflow filename from context
             const workflowPath = context.payload.workflow;
-            console.log('Workflow path:', workflowPath);
+            core.info(`Workflow path: ${workflowPath}`);
             const workflowFilename = workflowPath.split('/').pop();
-            console.log('Workflow filename:', workflowFilename);
+            core.info(`Workflow filename: ${workflowFilename}`);
             core.setOutput('filename', workflowFilename);
 
       - name: Get workflow filename without script
