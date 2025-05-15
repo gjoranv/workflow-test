@@ -38,6 +38,11 @@ jobs:
       - name: Get workflow filename without script
         id: get-workflow-filename
         run: |
+          # Fail if the workflow is not triggered by a workflow_dispatch event
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+              echo "This workflow is not triggered by a workflow_dispatch event."
+              exit 1
+          fi
           path="${{ github.event.workflow }}"
           echo "Workflow path: $path"
           filename=$(basename "$path")
