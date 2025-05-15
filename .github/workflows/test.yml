@@ -35,12 +35,22 @@ jobs:
         run: |
           echo "Dry run: ${{ inputs.dry-run }}"
 
-      - name: Print context
+      - name: Get workflow filname
+        id: get-workflow-filename
         uses: actions/github-script@v7
         with:
           script: |
-            // Print the context
-            console.log('Context:', context);
+            // Print workflow from context
+            const workflowPath = context.payload.workflow;
+            console.log('payload.workflow:', workflowPath);
+            const workflowFilename = workflowPath.split('/').pop();
+            console.log('Workflow filename:', workflowFilename);
+            core.setOutput('workflow_filename', workflowFilename);
+
+      - name: Use workflow  filename
+        id: use-workflow-filename
+        run: |
+          echo "Workflow filename from previous step: ${{ steps.get-workflow-filename.outputs.workflow_filename }}"
 
       - name: Checkout repository
         uses: actions/checkout@v4
