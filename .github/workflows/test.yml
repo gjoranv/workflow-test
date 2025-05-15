@@ -35,8 +35,24 @@ jobs:
         run: |
           echo "Dry run: ${{ inputs.dry-run }}"
 
-      - name: Get workflow filename without script
+      - name: Get workflow filename from event payload
         id: get-workflow-filename
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Fail if the workflow is not triggered by a workflow_dispatch event
+            if (context.eventName !== 'workflow_dispatch') {
+              throw new Error('This workflow must be triggered by a workflow_dispatch event.');              
+            }
+            // Get workflow filename from context
+            const workflowPath = context.payload.workflow;
+            console.log('Workflow path:', workflowPath);
+            const workflowFilename = workflowPath.split('/').pop();
+            console.log('Workflow filename:', workflowFilename);
+            core.setOutput('filename', workflowFilename);
+
+      - name: Get workflow filename without script
+        id: get-workflow-filename-no-script
         run: |
           # Fail if the workflow is not triggered by a workflow_dispatch event
           if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
