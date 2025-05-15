@@ -35,6 +35,13 @@ jobs:
         run: |
           echo "Dry run: ${{ inputs.dry-run }}"
 
+      - name: Print context
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Print the context
+            console.log('Context:', context);
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
